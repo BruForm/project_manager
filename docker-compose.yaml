@@ -39,7 +39,6 @@ services:
       timeout: 5s
       retries: 5
 
-
   node_installer:
     image: "node:16"
     restart: "no"

@@ -1,19 +1,19 @@
 include ./.env
 
-DC := "docker compose"
+DC = docker compose
 
 start:
 	@echo "*** Start containers ***"
-	$DC up
+	$(DC) up
 
 stop:
-	@docker compose stop
+	@$(DC) stop
 	#@cd ./frontend && git commit -am "[AUTO] commit frontend"
 	#@cd ./backend && git commit -am "[AUTO] commit backend" && git push origin main
 	#@echo "*** Container STOPPED and AUTO COMMIT frontend and backend directories => DONE ***"
 
 down:
-	@docker compose down -v
+	@$(DC) down -v
 	@echo "*** Down => DONE ***"
 
 prune:
@@ -31,11 +31,11 @@ save-infra:
 
 db-connect:
 	@echo "*** Connecting to DB ***"
-	@docker compose exec DB sh -c "mysql -h DB -u'$(MARIADB_USER)' -p'$(MARIADB_PASSWORD)'"
+	@$(DC) exec DB sh -c "mysql -h DB -u'$(MARIADB_USER)' -p'$(MARIADB_PASSWORD)'"
 
 db-connect-root:
 	@echo "*** Connecting to DB ***"
-	@docker compose exec DB sh -c "mysql -h DB -u'root' -p'$(MARIADB_ROOT_PASSWORD)'"
+	@$(DC) exec DB sh -c "mysql -h DB -u'root' -p'$(MARIADB_ROOT_PASSWORD)'"
 
 db-dump:
 	@echo "*** Starting DUMP DB ***"
@@ -51,12 +51,12 @@ db-dump:
 
 db-load:
 	@echo "*** Starting LOAD DB ***"
-	@docker compose exec -T DB sh -c 'mariadb $(MARIADB_DATABASE) -u"$(MARIADB_USER)" -p"$(MARIADB_PASSWORD)"' < ./sql/$(MARIADB_DATABASE).sql
+	@$(DC) exec -T DB sh -c 'mariadb $(MARIADB_DATABASE) -u"$(MARIADB_USER)" -p"$(MARIADB_PASSWORD)"' < ./sql/$(MARIADB_DATABASE).sql
 	@echo "*** LOAD DB => DONE ***"
 
 db-first-load:
 	@echo "*** Starting FIRST LOAD DB ***"
-	@docker compose exec -T DB sh -c 'mariadb -u"root" -p"$(MARIADB_ROOT_PASSWORD)"' < ./sql/INIT/projectManagerDb_INIT.sql
+	@$(DC) exec -T DB sh -c 'mariadb -u"root" -p"$(MARIADB_ROOT_PASSWORD)"' < ./sql/INIT/projectManagerDb_INIT.sql
 	@echo "*** FIRST LOAD DB => DONE ***"
 
 goapp:
